@@ -9,6 +9,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import static org.apache.http.HttpStatus.*;
+
 @RunWith(Parameterized.class)
 public class OrderCreationTest {
     private Order order;
@@ -43,7 +45,7 @@ public class OrderCreationTest {
     @DisplayName("Проверка создания заказов с использованием разных цветов")
     public void createOrder() {
         int statusCode = orderMethods.createNewOrder(order).extract().statusCode();
-        Assert.assertEquals("Вернулся некорректный код состояния, должен быть 201", 201, statusCode);
+        Assert.assertEquals("Вернулся некорректный код состояния, должен быть 201", SC_CREATED, statusCode);
         int orderResponseMessage = orderMethods.createNewOrder(order).extract().path("track");
         Assert.assertTrue("Значение параметра \"track\" не должно быть пустым", orderResponseMessage > 0);
 

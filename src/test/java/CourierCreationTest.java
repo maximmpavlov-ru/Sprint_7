@@ -6,6 +6,8 @@ import org.junit.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.apache.http.HttpStatus.*;
+
 public class CourierCreationTest {
 
     private static Courier COURIER;
@@ -27,8 +29,9 @@ public class CourierCreationTest {
         ValidatableResponse createResponse = COURIER_METHODS.createCourier(COURIER);
         int statusCode = createResponse.extract().statusCode();
         boolean isCreated = createResponse.extract().path("ok");
-        Assert.assertEquals("Код ответа должен быть 201", 201, statusCode);
-        Assert.assertTrue("Сообщение о создании курьера не получено", isCreated);;
+        Assert.assertEquals("Код ответа должен быть 201", SC_CREATED, statusCode);
+        Assert.assertTrue("Сообщение о создании курьера не получено", isCreated);
+        ;
         courierCredentials = CourierCredentials.getCourierCredentials(COURIER);
         ValidatableResponse loginResponse = COURIER_METHODS.loginCourier(courierCredentials);
         Integer id = loginResponse.extract().path("id");
@@ -41,7 +44,7 @@ public class CourierCreationTest {
         ValidatableResponse createResponse = COURIER_METHODS.createCourier(COURIER_WITHOUT_LOGIN);
         int statusCode = createResponse.extract().statusCode();
         String responseMessageText = createResponse.extract().path("message");
-        Assert.assertEquals("Код ответа должен быть 400", 400, statusCode);
+        Assert.assertEquals("Код ответа должен быть 400", SC_BAD_REQUEST, statusCode);
         Assert.assertEquals(
                 "Система должна возвращать следующий текст ошибки: \"Недостаточно данных для создания учетной записи\"",
                 "Недостаточно данных для создания учетной записи", responseMessageText);
@@ -55,7 +58,7 @@ public class CourierCreationTest {
         ValidatableResponse createResponse = COURIER_METHODS.createCourier(COURIER_DUPLICATE);
         int statusCode = createResponse.extract().statusCode();
         String responseMessageText = createResponse.extract().path("message");
-        Assert.assertEquals("Код ответа должен быть 409", 409, statusCode);
+        Assert.assertEquals("Код ответа должен быть 409", SC_CONFLICT, statusCode);
         Assert.assertEquals(
                 "Система должна возвращать следующий текст ошибки: \"Этот логин уже используется. Попробуйте другой.\"",
                 "Этот логин уже используется. Попробуйте другой.", responseMessageText);

@@ -6,6 +6,8 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import static org.apache.http.HttpStatus.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +34,7 @@ public class CourierLoginTest {
         ValidatableResponse loginResponse = COURIER_METHODS.loginCourier(courierCredentials);
         int statusCode = loginResponse.extract().statusCode();
         Integer id = loginResponse.extract().path("id");
-        Assert.assertEquals("Код ответа должен быть 200", 200, statusCode);
+        Assert.assertEquals("Код ответа должен быть 200", SC_OK, statusCode);
         Assert.assertNotNull("Система должна возвращать ID в случае успешного логина", id);
         COURIERS_IDS.add(id);
     }
@@ -44,7 +46,7 @@ public class CourierLoginTest {
         ValidatableResponse loginResponse = COURIER_METHODS.loginCourier(courierCredentials);
         int statusCode = loginResponse.extract().statusCode();
         String responseMessageText = loginResponse.extract().path("message");
-        Assert.assertEquals("Код ответа должен быть 400", 400, statusCode);
+        Assert.assertEquals("Код ответа должен быть 400", SC_BAD_REQUEST, statusCode);
         Assert.assertEquals(
                 "Система должна возвращать следующий текст ошибки: \"Недостаточно данных для входа\"",
                 "Недостаточно данных для входа", responseMessageText);
@@ -57,7 +59,7 @@ public class CourierLoginTest {
         ValidatableResponse loginResponse = COURIER_METHODS.loginCourier(courierCredentials);
         int statusCode = loginResponse.extract().statusCode();
         String responseMessageText = loginResponse.extract().path("message");
-        Assert.assertEquals("Код ответа должен быть 404", 404, statusCode);
+        Assert.assertEquals("Код ответа должен быть 404", SC_NOT_FOUND, statusCode);
         Assert.assertEquals(
                 "Система должна возвращать следующий текст ошибки: \"Учетная запись не найдена\"",
                 "Учетная запись не найдена", responseMessageText);

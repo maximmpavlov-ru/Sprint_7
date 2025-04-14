@@ -1,29 +1,29 @@
 package orders;
 
+import common.RequestSpecification;
 import io.qameta.allure.Step;
 import io.restassured.response.ValidatableResponse;
 
 import static io.restassured.RestAssured.given;
-import static orders.OrderRequestSpecification.requestSpec;
 
 public class OrderMethods {
 
     @Step("Добавление нового заказа")
     public ValidatableResponse createNewOrder(Order order) {
         return given().
-                spec(requestSpec()).
+                spec(RequestSpecification.requestSpec()).
                 body(order).
                 when().
-                post().
+                post("/orders").
                 then();
     }
 
     @Step("Получение списка всех заказов")
     public ValidatableResponse getAllOrders() {
         return given().
-                spec(requestSpec()).
+                spec(RequestSpecification.requestSpec()).
                 when().
-                get().
+                get("orders").
                 then();
     }
 }

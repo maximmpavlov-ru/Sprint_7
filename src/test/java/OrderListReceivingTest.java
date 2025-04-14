@@ -5,6 +5,8 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import static org.apache.http.HttpStatus.*;
+
 import java.util.ArrayList;
 
 public class OrderListReceivingTest {
@@ -22,8 +24,8 @@ public class OrderListReceivingTest {
         ValidatableResponse getAllOrdersRequestResponse = ORDER_METHODS.getAllOrders();
         int statusCode = getAllOrdersRequestResponse.extract().statusCode();
         ArrayList<String> orderBody = getAllOrdersRequestResponse.extract().path("orders");
-        Assert.assertEquals("Вернулся некорректный код состояния, должен быть 200", 200, statusCode);
+        Assert.assertEquals("Вернулся некорректный код состояния, должен быть 200", SC_OK, statusCode);
         Assert.assertTrue("Список заказов не должен быть пустым",
-                (orderBody!=null) && (!orderBody.isEmpty()));
+                (orderBody != null) && (!orderBody.isEmpty()));
     }
 }
